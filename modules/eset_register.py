@@ -1,9 +1,6 @@
-# v1.0.9.3 (221123-0959)
-VERSION = 'v1.0.9.3 (221123-0959) by rzc0d3r'
-
-from modules.logger import *
-from modules.shared_tools import *
-from modules.sec_email_api import *
+from .logger import *
+from .shared_tools import *
+from .sec_email_api import *
 
 import re
 import time
@@ -46,17 +43,22 @@ class EsetRegister:
         else:
             console_log("Cookies were not bypassed (it doesn't affect the algorithm, I think :D)", ERROR)
 
-        exec_js(f"{GET_EBID}('Email').value='{self.email_obj.get_full_login()}'")
-        exec_js('document.forms[0].submit()')
+        exec_js(f"return {GET_EBID}('email')").send_keys(self.email_obj.get_full_login())
+        uCE(self.driver, f"return {CLICK_WITH_BOOL}({DEFINE_GET_EBAV_FUNCTION}('button', 'data-label', 'register-continue-button'))")
 
         console_log('\n[PASSWD] Register page loading...', INFO)
-        uCE(self.driver, f"return typeof {GET_EBID}('Password') === 'object'")
-        uCE(self.driver, f"return typeof {GET_EBCN}('input-main input-main--notempty')[0] === 'object'")
-        exec_js(f"{GET_EBID}('Password').value='{self.eset_password}'")
-        exec_js(f"{GET_EBCN}('input-main input-main--notempty')[0].value='230'") # Change Account Region to Ukraine
-        exec_js('document.forms[0].submit()')
+        uCE(self.driver, f"return typeof {GET_EBAV}('button', 'data-label', 'register-create-account-button') === 'object'")
         console_log('[PASSWD] Register page is loaded!', OK)
-        
+        exec_js(f"return {GET_EBID}('password')").send_keys(self.eset_password)
+        # Select Ukraine country
+        if exec_js(f"return {GET_EBCN}('select__single-value ltr-1dimb5e-singleValue')[0]").text != 'Ukraine':
+            exec_js(f"return {GET_EBID}('country-select-control')").click()
+            for country in exec_js(f"return {GET_EBCN}('select__option ltr-gaqfzi-option')"):
+                if country.text == 'Ukraine':
+                    country.click()
+                    break
+        uCE(self.driver, f"return {CLICK_WITH_BOOL}({DEFINE_GET_EBAV_FUNCTION}('button', 'data-label', 'register-create-account-button'))")
+
         for _ in range(DEFAULT_MAX_ITER):
             title = exec_js('return document.title')
             if title == 'Service not available':
@@ -70,12 +72,14 @@ class EsetRegister:
     def confirmAccount(self):
         uCE = untilConditionExecute
 
-        token = self.getToken()
-        console_log(f'\nESET Token: {token}', OK)
+        console_log(f'\nESET-Token interception...', INFO)
+        token = self.getToken(max_iter=2*DEFAULT_MAX_ITER)
+        console_log(f'ESET-Token: {token}', OK)
         console_log('\nAccount confirmation is in progress...', INFO)
         self.driver.get(f'https://login.eset.com/link/confirmregistration?token={token}')
         uCE(self.driver, 'return document.title === "ESET HOME"')
         uCE(self.driver, f'return typeof {GET_EBCN}("verification-email_p")[1] !== "object"')
+        uCE(self.driver, f"return typeof {GET_EBAV}('ion-button', 'robot', 'home-overview-empty-add-license-btn') === 'object'")
         console_log('Account successfully confirmed!', OK)
         return True
 
