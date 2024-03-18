@@ -1,14 +1,27 @@
-1. Run main.py with the --account parameter using the console:
+1. Run main.py using console:
+
+Best method
+```
+python main.py --chrome --account --use-hi2in
+```
+An outdated method
 ```
 python main.py --chrome --account
 ```
-> Or run compiled .exe file
+
+> Or run compiled .exe file:
+
+Best method
 ```
-ESET-KeyGen_v1.3.2.0_win64.exe --chrome --account
+ESET-KeyGen_v1.4.1.0_win64.exe --chrome --account --use-hi2in
+```
+An outdated method
+```
+ESET-KeyGen_v1.4.1.0_win64.exe --chrome --account
 ```
 > File name is unique for each version! Do not copy the above command. This is an example!
 
-2. Wait until appears 'Press Enter...' and you will see the account data
+2. Wait until you will see the account data
 
 > This information will also be written to a file named "Today date - ESET ACCOUNTS.txt"
 
@@ -32,3 +45,21 @@ ESET-KeyGen_v1.3.2.0_win64.exe --chrome --account
 ![](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/activation_with_account_7.png)
 
 > Just click "Continue" until you are told that you have successfully activated the antivirus.
+
+# Small Business Account (I don't know how to use it, lmao. NOW DISABLED)
+
+1. Run main.py with the --account parameter using the console:
+```
+python main.py --chrome --small-business-account
+```
+> Or run compiled .exe file
+```
+ESET-KeyGen_v1.4.0.0_win64.exe --chrome --small-business-account
+```
+> File name is unique for each version! Do not copy the above command. This is an example!
+
+2. Wait until you will see the account data
+
+> This information will also be written to a file named "Today date - ESET ACCOUNTS.txt"
+
+![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/small_business_account_run_win.png)

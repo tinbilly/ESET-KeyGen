@@ -1,12 +1,12 @@
 # ESET-KeyGen
-ESET-KeyGen - Trial-Key & Account generator for ESET Antivirus (last test was on 28.02.2024 at 10:15 UTC+2)
+ESET-KeyGen - Trial-Key & Account generator for ESET Antivirus (last test was on 18.03.2024 at 10:16 UTC+2)
 
 ![](img/project_preview.png)
 
 
 ---
-# My github page is currently blocked by ESET Antivirus, so you will not be able to access the project.
-## Before you can access my github page, you need to disable internet protection in Eset Antivirus. You now have access to this release! After you have done everything you want to do, turn internet protection back on.
+### My github page is currently blocked by ESET Antivirus, so you will not be able to access the project.
+### Before you can access my github page, you need to disable internet protection in Eset Antivirus. You now have access to this release! After you have done everything you want to do, turn internet protection back on.
 ### [The second way around this](wiki/GithubWorkaround.md)
 ---
 
@@ -15,11 +15,12 @@ ESET-KeyGen - Trial-Key & Account generator for ESET Antivirus (last test was on
 ## Using GitHub Actions CI
 You can simply use the GitHub actions workflow given [here](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/.github/workflows/eset.yml) in your GitHub repo.
 
-Add the workflow file to your GitHub repo. Then goto the **Actions** tab, choose **ESET Keys & Accounts Generator (MAIN)** actions and then run the workflow.
+Make a fork of my project. Go to it.
+Then goto the **Actions** tab, choose **Generator** actions and then run the workflow.
 
-It will ask the number of accounts and licenses to be generated. If you don't want to generate one of them, enter **0** as the answer.
+It will ask the number of accounts, keys to be generated.
 
-## Using your Computer
+## Using your device
 
 ### Installing Browser
 #### Google Chrome (fully supports)
@@ -48,23 +49,18 @@ It will ask the number of accounts and licenses to be generated. If you don't wa
 pip install -r requirements.txt
 ```
 
-Or without requirements.txt:
-
-```
-pip install selenium requests colorama typing-extensions
-```
-
 ## Preparing ESET
 Delete your current ESET HOME account
 
 ![](img/delete_eset_home_account.png)
 
-## Using the repository
+## How to use (Part 2)
 1. [Account Generator](wiki/AccountGenerator.md)
 2. [Key Generator](wiki/KeyGenerator.md)
 3. [Command Line Arguments](wiki/CommandLineArguments.md)
+---
 
-# Recommendations and information
+# Additional information
 
 1. It is recommended to run the project as a non-administrator or root user.
 2. Do not minimize or close the browser window before the program is finished!!!
@@ -76,3 +72,6 @@ Delete your current ESET HOME account
 6. Found an activation error under the code ecp4125, which appears when you try to activate the antivirus with an account.
    Perhaps not everyone has it error, but still try it, and if it does not work, use the keys. 
 7. You can test the argument ```--skip-webdriver-menu``` theoretically the program itself will install the browser and web driver to it!
+
+--- 
+## This project exists in its current state thanks to all the people who have contributed and to all who create issues, which we solve together!
