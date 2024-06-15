@@ -1,74 +1,121 @@
-# How to use the Key Generator
+## 1. Generation using implemented email APIs (Auto method, but less stable)
+> If you use ```--email-api tempmail```, you need to have the cloudflare captcha solved!
+> Then you need to press Enter after you see the email site, without fail (**[INPT]** console message type)!
 
-## ESET Endpoint Security (BISSNESS)
-1. Run main.py using console:
-Best method
-```
-python main.py --chrome --business-key --use-hi2in
-```
-An outdated method
-```
-python main.py --chrome --business-key
-```
+> Also, if you see a message like **[INPT]** in the console, it means that you need to do keyboard input into the console!
 
-> Or run compiled .exe file:
+> You can also try the command line argument ```--try-auto-cloudflare``` which will try to automatically pass cloudflare captcha!
 
-Best method
-```
-ESET-KeyGen_v1.4.1.1_win64.exe --chrome --business-key --use-hi2in
-```
-An outdated method
-```
-ESET-KeyGen_v1.4.1.1_win64.exe --chrome --business-key
-```
-> File name is unique for each version! Do not copy the above command. This is an example!
+<details>
+  <summary>Example generation through --email-api tempmail</summary>
+  
+  ![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/key_run_win_tempmail.png)
+</details>
 
-2. Wait until appears you will see "Solve the captcha on the page manually!!!". Next, you will see a captcha with text input in the browser window created. You solve it and then just do nothing, the algorithm will do everything for you.
+---
 
-3. Wait until appears you will see the license key 
+<details>
+  <summary>ESET HOME Security Premium</summary>
+  
+  1. Run main.py or executable file or use [MBCI](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/wiki/MBCI-Inferface.md):
+  ```
+  python main.py --chrome --key
+  ```
+  ```
+  ESET-KeyGen_v1.4.7.0_win64.exe --chrome --key
+  ```
+  > File name is unique for each version! Do not copy the above command. This is an example!
 
-> This information will also be written to a file named "Today date - ESET KEYS.txt"
-> 
-![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/business_key_run_win.png)
+  2. Wait until you will see the account data
+  > This information will also be written to a file named "Today date - ESET ACCOUNTS.txt"
 
-----------------------------------------------------------------------------------------------------------------------------
+  ![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/key_run_win.png)
+</details>
 
-## ESET Security Premium (ESET HOME)
+<details>
+  <summary>ESET Endpoint Security + ESET Server Security</summary>
+  
+  1. Run main.py or executable file use [MBCI](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/wiki/MBCI-Inferface.md):
+  ```
+  python main.py --chrome --business-key
+  ```
+  ```
+  ESET-KeyGen_v1.4.7.0_win64.exe --chrome --business-key
+  ```
+  > File name is unique for each version! Do not copy the above command. This is an example!
 
-1. Run main.py using console:
-Best method
-```
-python main.py --chrome --key --use-hi2in
-```
-An outdated method
-```
-python main.py --chrome --key
-```
+  > It is also recommended to use ```developermail```, ```guerrillamail```, ```10minutemail``` email api to generate such accounts. So if you are unable to generate this account, try different variations of the email APIs!
 
-> Or run compiled .exe file:
+  2. Wait until appears you will see *"Solve the captcha on the page manually!!!"*. Next, you will see a captcha with text input in the browser window created. You solve it and then just do nothing, the algorithm will do everything for you!
 
-Best method
-```
-ESET-KeyGen_v1.4.1.1_win64.exe --chrome --key --use-hi2in
-```
-An outdated method
-```
-ESET-KeyGen_v1.4.1.1_win64.exe --chrome --key
-```
-> File name is unique for each version! Do not copy the above command. This is an example!
+  3. Wait until you will see the account data
+  > This information will also be written to a file named "Today date - ESET ACCOUNTS.txt"
 
-2. Wait until appears you will see "Solve the captcha on the page manually!!!". Next, you will see a captcha with text input in the browser window created. You solve it and then just do nothing, the algorithm will do everything for you.
+  ![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/business_key_run_win.png)
+</details>
 
-3. Wait until appears you will see the license key 
+## 2. Generation using your email provider (Totally manual method, but hyper stable)
 
-> This information will also be written to a file named "Today date - ESET KEYS.txt"
-> 
-![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/key_run_win.png)
+<details>
+  <summary>ESET HOME Security Premium</summary>
+  
+  1. Run main.py or executable file use [MBCI](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/wiki/MBCI-Inferface.md):
+  ```
+  python main.py --chrome --key --custom-email-api
+  ```
+  ```
+  ESET-KeyGen_v1.4.7.0_win64.exe --chrome --key --custom-email-api
+  ```
+  > File name is unique for each version! Do not copy the above command. This is an example!
 
-----------------------------------------------------------------------------------------------------------------------------
+  2. Then in the console you'll see *"Enter an email address you have access to"* and you'll need to enter a real existing email address that you can read incoming emails to. I suggest using a temporary email for this, such as [TempMail](https://temp-mail.org)
+  > Then the algorithm will continue as in the first method
 
-Activate the antivirus with the key. Use the button corresponding to this action
+  3. After some time in the console you will see the message *"Enter the link to activate your account, it will come to the email address you provide"*, here you need to go to your email and find mail in inbox (you will have to wait)
+    
+     **FROM: info@product.eset.com**
+     
+     **SUBJECT: Account Confirmation**
 
-![Activation with key](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/activation_with_key.png)
+     Then open that email and copy the link that is in the button (right click on the button, copy link address) and paste it into the console. If you have done everything correctly, the generation will complete successfully!
 
-> Just click "Continue" until you are told that you have successfully activated the antivirus.
+     ![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/activated_href_esethome.png)
+
+  4. Wait until appears you will see the license key 
+  > This information will also be written to a file named "Today date - ESET KEYS.txt"
+
+  ![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/key_run_win_custom_email_api.png)
+</details>
+
+<details>
+  <summary>ESET Endpoint Security + ESET Server Security</summary>
+  
+  1. Run main.py or executable file use [MBCI](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/wiki/MBCI-Inferface.md):
+  ```
+  python main.py --chrome --business-key --custom-email-api
+  ```
+  ```
+  ESET-KeyGen_v1.4.7.0_win64.exe --chrome --business-key --custom-email-api
+  ```
+  > File name is unique for each version! Do not copy the above command. This is an example!
+
+  2. Then in the console you'll see *"Enter an email address you have access to"* and you'll need to enter a real existing email address that you can read incoming emails to. I suggest using a temporary email for this, such as [TempMail](https://temp-mail.org)
+  > Then the algorithm will continue as in the first method
+
+  3. Wait until appears you will see *"Solve the captcha on the page manually!!!"*. Next, you will see a captcha with text input in the browser window created. You solve it and then just do nothing, the algorithm will do everything for you!
+
+  4. After some time in the console you will see the message *"Enter the link to activate your account, it will come to the email address you provide"*, here you need to go to your email and find mail in inbox (you will have to wait)
+
+     **FROM: noreply@eba.eset.com**
+
+     **SUBJECT: ESET BUSINESS ACCOUNT - Account activation**
+
+     Then open that email and copy the link that is in the button (right click on the button, copy link address) and paste it into the console. If you have done everything correctly, the generation will complete successfully!
+
+     ![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/activated_href_business.png)
+
+  5. Wait until appears you will see the license key 
+  > This information will also be written to a file named "Today date - ESET KEYS.txt"
+
+![Windows](https://github.com/rzc0d3r/ESET-KeyGen/blob/main/img/business_key_run_win_custom_email_api.png)
+</details>
