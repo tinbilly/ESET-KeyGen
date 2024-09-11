@@ -20,7 +20,7 @@ import time
 import sys
 import re
 
-VERSION = ['v1.5.0.2', 1502]
+VERSION = ['v1.5.0.6', 1506]
 LOGO = f"""
 ███████╗███████╗███████╗████████╗   ██╗  ██╗███████╗██╗   ██╗ ██████╗ ███████╗███╗   ██╗
 ██╔════╝██╔════╝██╔════╝╚══██╔══╝   ██║ ██╔╝██╔════╝╚██╗ ██╔╝██╔════╝ ██╔════╝████╗  ██║
@@ -51,15 +51,14 @@ if datetime.datetime.now().day == 6 and datetime.datetime.now().month == 8: # Bi
 
 # -- Quick settings [for Developers to quickly change behavior without changing all files] --
 DEFAULT_EMAIL_API = 'developermail'
-AVAILABLE_EMAIL_APIS = ['1secmail', '10minutemail', 'guerrillamail', 'developermail']
-WEB_WRAPPER_EMAIL_APIS = ['10minutemail', 'hi2in', 'tempmail', 'guerrillamail']
+AVAILABLE_EMAIL_APIS = ['1secmail', '10minutemail', 'guerrillamail', 'developermail', 'mailticking']
+WEB_WRAPPER_EMAIL_APIS = ['10minutemail', 'guerrillamail', 'mailticking']
 EMAIL_API_CLASSES = {
     'guerrillamail': GuerRillaMailAPI,
-    '10minutemail': TenMinuteMailAPI,
-    'hi2in': Hi2inAPI,                  
-    'tempmail': TempMailAPI,
+    '10minutemail': TenMinuteMailAPI,           
     '1secmail': OneSecEmailAPI,
     'developermail': DeveloperMailAPI,
+    'mailticking': MailTickingAPI
 }
 
 args = {
@@ -212,6 +211,20 @@ def main():
     if len(sys.argv) == 1: # for Menu
         print()
     try:
+        # changing input arguments for special cases
+        if not args['update']:
+            if platform.release() == '7' and sys.platform.startswith('win'): # fix for Windows 7
+                args['no_headless'] = True
+            elif args['endpoint_key'] or args['protecthub_account']:
+                args['no_headless'] = True
+                if not args['custom_email_api']:
+                    if args['email_api'] not in ['mailticking', 'developermail']:
+                        raise RuntimeError('--endpoint-key, --protecthub-account works ONLY if you use the --custom-email-api argument or the following Email APIs: mailticking, developermail!!!')
+        # check internet connection
+        try:
+            requests.get('https://www.google.com', timeout=10, allow_redirects=True)
+        except:
+            raise RuntimeError("Check your internet connection!!!")
         # check program updates
         if args['update']:
             print(f'{Fore.LIGHTMAGENTA_EX}-- Updater --{Fore.RESET}\n')
@@ -237,12 +250,7 @@ def main():
                         console_log('Project up to date!!!\n', OK)
             except:
                 pass
-        # initialization and configuration of everything necessary for work
-        # changing input arguments for special cases
-        if platform.release() == '7' and sys.platform.startswith('win'): # fix for Windows 7
-            args['no_headless'] = True
-        elif args['endpoint_key'] or args['protecthub_account'] or args['email_api'] in ['tempmail']:
-            args['no_headless'] = True
+        # initialization and configuration of everything necessary for work            
         driver = None
         webdriver_path = None
         browser_name = GOOGLE_CHROME
@@ -281,7 +289,7 @@ def main():
             while True:
                 email = input(f'[  {colorama.Fore.YELLOW}INPT{colorama.Fore.RESET}  ] {colorama.Fore.CYAN}Enter the email address you have access to: {colorama.Fore.RESET}').strip()
                 try:
-                    matched_email = re.match(r'[-a-z0-9+]+@[a-z]+(\.[a-z]+)+', email).group()
+                    matched_email = re.match(r'[-a-z0-9+.]+@[a-z]+(\.[a-z]+)+', email).group()
                     if matched_email == email:
                         email_obj.email = matched_email
                         console_log('Mail has the correct syntax!', OK)
@@ -376,7 +384,7 @@ def main():
         input('Press Enter to exit...')
     else:
         time.sleep(3) # exit-delay
-    if driver is not None:
+    if globals().get('driver', None) is not None:
         driver.quit()
     sys.exit()
 

@@ -15,7 +15,7 @@ class EsetRegister(object):
         uCE = untilConditionExecute
 
         console_log('\n[EMAIL] Register page loading...', INFO)
-        if isinstance(self.email_obj, (Hi2inAPI, TenMinuteMailAPI, TempMailAPI, GuerRillaMailAPI)):
+        if isinstance(self.email_obj, (TenMinuteMailAPI, GuerRillaMailAPI, MailTickingAPI)):
             self.driver.switch_to.new_window('EsetRegister')
             self.window_handle = self.driver.current_window_handle
         self.driver.get('https://login.eset.com/Register')
@@ -63,7 +63,7 @@ class EsetRegister(object):
             token = parseToken(self.email_obj, max_iter=100, delay=3)
         else:
             console_log(f'\n[{self.email_obj.class_name}] ESET-HOME-Token interception...', INFO)
-            if isinstance(self.email_obj, (Hi2inAPI, TenMinuteMailAPI, TempMailAPI, GuerRillaMailAPI)):
+            if isinstance(self.email_obj, (TenMinuteMailAPI, GuerRillaMailAPI, MailTickingAPI)):
                 token = parseToken(self.email_obj, self.driver, max_iter=100, delay=3)
                 self.driver.switch_to.window(self.window_handle)
             else:
@@ -132,7 +132,7 @@ class EsetProtectHubRegister(object):
         uCE = untilConditionExecute
         # STEP 0
         console_log('\nLoading ESET ProtectHub Page...', INFO)
-        if isinstance(self.email_obj, (Hi2inAPI, TenMinuteMailAPI, TempMailAPI, GuerRillaMailAPI)):
+        if isinstance(self.email_obj, (TenMinuteMailAPI, GuerRillaMailAPI, MailTickingAPI)):
             self.driver.switch_to.new_window('EsetBusinessRegister')
             self.window_handle = self.driver.current_window_handle
         self.driver.get('https://protecthub.eset.com/public/registration?culture=en-US')
@@ -165,7 +165,7 @@ class EsetProtectHubRegister(object):
             uCE(self.driver, f'return {GET_EBID}("registration-email-sent").innerText === "We sent you a verification email"', max_iter=10)
             console_log('Successfully!', OK)
         except:
-            raise RuntimeError('ESET temporarily blocked your IP, try again later!!! TRY VPN!!!')
+            raise RuntimeError('ESET has blocked your IP or email, try again later!!! Try to use VPN or try to change Email API!!!')
         return True
 
     def activateAccount(self):
@@ -195,7 +195,7 @@ class EsetProtectHubRegister(object):
             token = parseToken(self.email_obj, eset_business=True, max_iter=100, delay=3)
         else:
             console_log(f'\n[{self.email_obj.class_name}] ProtectHub-Token interception...', INFO)
-            if isinstance(self.email_obj, (Hi2inAPI, TenMinuteMailAPI, TempMailAPI, GuerRillaMailAPI)):
+            if isinstance(self.email_obj, (TenMinuteMailAPI, GuerRillaMailAPI, MailTickingAPI)):
                 token = parseToken(self.email_obj, self.driver, True, max_iter=100, delay=3)
                 self.driver.switch_to.window(self.window_handle)
             else:
@@ -228,15 +228,32 @@ class EsetProtectHubKeygen(object):
         uCE(self.driver, f'return {GET_EBID}("welcome-dialog-generate-trial-license") != null', delay=3)
         console_log('Successfully!', OK)
         console_log('\nSending a request for a get license...', INFO)
-        exec_js(f'return {GET_EBID}("welcome-dialog-generate-trial-license").click()')
-        console_log('Request successfully sent!', OK)
-
+        try:
+            exec_js(f'return {GET_EBID}("welcome-dialog-generate-trial-license").click()')
+            exec_js(f'return {GET_EBID}("welcome-dialog-generate-trial-license")').click()
+        except:
+            pass
+        license_is_being_generated = False
+        for _ in range(DEFAULT_MAX_ITER):
+            try:
+                r = exec_js(f"return {GET_EBCN}('Toastify__toast-body toastBody')[0].innerText")
+                if r.lower().find('a trial license is being generated') != -1:
+                    license_is_being_generated = True
+                    console_log('Request successfully sent!', OK)
+                    break
+            except Exception as E:
+                pass
+            time.sleep(DEFAULT_DELAY)
+        
+        if not license_is_being_generated:
+            raise RuntimeError('The request has not been sent!')
+        
         if self.email_obj.class_name == 'custom':
             console_log('\nWait for a message to your e-mail about successful key generation!!!', WARN, True)
             return None, None, None
         else:    
             console_log('\nLicense uploads...', INFO)
-            license_key, license_out_date, license_id = parseEPHKey(self.email_obj, self.driver, delay=5, max_iter=120)
+            license_key, license_out_date, license_id = parseEPHKey(self.email_obj, self.driver, delay=5, max_iter=60)
             console_log(f'License ID: {license_id}', OK)
             console_log('\nGetting information from the license...', INFO)
             console_log('Information successfully received!', OK)
